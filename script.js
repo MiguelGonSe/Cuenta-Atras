@@ -1,0 +1,111 @@
+let titulo = document.createElement("h1");
+titulo.textContent = "Cuenta Atrás";
+document.body.appendChild(titulo);
+
+let div = document.createElement("div");
+div.className = "cuentaAtras";
+
+let spanDias = document.createElement("span");
+spanDias.id = "dias";
+spanDias.textContent = "0";
+let pDias = document.createElement("p");
+pDias.textContent = "dias";
+
+let spanHoras = document.createElement("span");
+spanHoras.id = "horas";
+spanHoras.textContent = "0";
+let pHoras = document.createElement("p");
+pHoras.textContent = "horas";
+
+let spanMinutos = document.createElement("span");
+spanMinutos.id = "minutos";
+spanMinutos.textContent = "0";
+let pMinutos = document.createElement("p");
+pMinutos.textContent = "minutos";
+
+let spanSegundos = document.createElement("span");
+spanSegundos.id = "segundos";
+spanSegundos.textContent = "0";
+let pSegundos = document.createElement("p");
+pSegundos.textContent = "segundos";
+
+div.appendChild(spanDias);
+div.appendChild(pDias);
+div.appendChild(spanHoras);
+div.appendChild(pHoras);
+div.appendChild(spanMinutos);
+div.appendChild(pMinutos);
+div.appendChild(spanSegundos);
+div.appendChild(pSegundos);
+
+let fecha = document.createElement("input");
+fecha.type = "date";
+fecha.id = "fecha";
+let fechaActual = new Date();
+// fecha.min = fechaActual; VALIDAR LA FECHA MINIMA
+
+
+fecha.addEventListener("change", () => {
+
+    const fechaSplit = fecha.value.split("-");
+    const fechaParse = new Date(Date.UTC(fechaSplit[0], fechaSplit[1] - 1, fechaSplit[2]));
+
+    const milisegundos = fechaParse - fechaActual;
+
+    // const diferenciaFecha = convertirMs(milisegundos); QUITAR! 
+    const diferenciaFecha = { dias: 0, horas: 0, minutos: 0, segundos: 10 }; // COMRPOBAR
+    spanDias.textContent = diferenciaFecha.dias;
+    spanHoras.textContent = diferenciaFecha.horas;
+    spanMinutos.textContent = diferenciaFecha.minutos;
+    spanSegundos.textContent = diferenciaFecha.segundos;
+
+    activateContador(diferenciaFecha);
+})
+
+function convertirMs(milisegundos) {
+    const segundosTotales = Math.floor(milisegundos / 1000);
+    const dias = Math.floor(segundosTotales / (60 * 60 * 24));
+    const horas = Math.floor((segundosTotales % (60 * 60 * 24)) / (60 * 60));
+    const minutos = Math.floor((segundosTotales % (60 * 60)) / 60);
+    const segundos = segundosTotales % 60;
+
+    return { dias, horas, minutos, segundos };
+}
+
+function activateContador(fecha) {
+
+    const timerId = setInterval(() => {
+
+        if (fecha.dias === 0 && fecha.horas === 0 && fecha.minutos === 0 && fecha.segundos === 0) {
+            clearInterval(timerId);
+            let fin = document.createElement("h1");
+            fin.textContent = "ENHORABUENA";
+            document.body.appendChild(fin);
+            return;
+        }
+
+        if (fecha.segundos < 1) {
+            if (fecha.minutos > 0) {
+                fecha.minutos--;
+                spanMinutos.textContent = fecha.minutos;
+                fecha.segundos = 60;
+                if (fecha.horas > 0 && fecha.minutos < 1) {
+                    fecha.horas--;
+                    spanHoras.textContent = fecha.horas;
+                    fecha.minutos = 60;
+                    if (fecha.dias > 0 && fecha.horas < 1) {
+                        fecha.dias--;
+                        spanDias.textContent = fecha.dias;
+                        fecha.horas = 24;
+                    }
+                }
+            }
+        }
+        fecha.segundos--;
+        spanSegundos.textContent = fecha.segundos;
+    }, 1000);
+}
+
+
+document.body.appendChild(fecha);
+document.body.appendChild(div);
