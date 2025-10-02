@@ -102,10 +102,29 @@ function activateContador(fecha) {
             }
         }
         fecha.segundos--;
+        changeColor(fecha);
         spanSegundos.textContent = fecha.segundos;
     }, 1000);
 }
 
+function changeColor(diferenciaFecha) {
+    if (diferenciaFecha.meses > 0) {
+        spanDias.style.backgroundColor = "green";
+        spanHoras.style.backgroundColor = "green";
+        spanMinutos.style.backgroundColor = "green";
+        spanSegundos.style.backgroundColor = "green";
+    } else if (diferenciaFecha.meses = 0 && diferenciaFecha.dias > 7) {
+        spanDias.style.backgroundColor = "orange";
+        spanHoras.style.backgroundColor = "orange";
+        spanMinutos.style.backgroundColor = "orange";
+        spanSegundos.style.backgroundColor = "orange";
+    } else {
+        spanDias.style.backgroundColor = "red";
+        spanHoras.style.backgroundColor = "red";
+        spanMinutos.style.backgroundColor = "red";
+        spanSegundos.style.backgroundColor = "red";
+    }
+}
 
 document.body.appendChild(fecha);
 document.body.appendChild(div);
