@@ -42,23 +42,35 @@ let fecha = document.createElement("input");
 fecha.type = "date";
 fecha.id = "fecha";
 let fechaActual = new Date();
-// fecha.min = fechaActual; VALIDAR LA FECHA MINIMA
+fecha.min = fechaActual.getFullYear() + '-' + (fechaActual.getMonth() + 1) + '-' + (fechaActual.getDate() < 10 ? ("0" + fechaActual.getDate()) : fechaActual.getDate()); // VALIDAR LA FECHA MINIMA
 
+let timerId = 0;
 
 fecha.addEventListener("change", () => {
+    console.log(fecha.value);
 
     const fechaSplit = fecha.value.split("-");
     const fechaParse = new Date(Date.UTC(fechaSplit[0], fechaSplit[1] - 1, fechaSplit[2]));
 
+    if (fechaParse < fechaActual) {
+        alert("No has introducido una fecha correcta");
+        fecha.value = null;
+        return;
+    }
+
+    if (timerId) {
+        clearInterval(timerId);
+        timerId = 0;
+    }
+
     const milisegundos = fechaParse - fechaActual;
 
-    // const diferenciaFecha = convertirMs(milisegundos); QUITAR! 
-    const diferenciaFecha = { dias: 0, horas: 0, minutos: 0, segundos: 10 }; // COMRPOBAR
+    const diferenciaFecha = convertirMs(milisegundos);
+
     spanDias.textContent = diferenciaFecha.dias;
     spanHoras.textContent = diferenciaFecha.horas;
     spanMinutos.textContent = diferenciaFecha.minutos;
     spanSegundos.textContent = diferenciaFecha.segundos;
-
     activateContador(diferenciaFecha);
 })
 
@@ -74,7 +86,7 @@ function convertirMs(milisegundos) {
 
 function activateContador(fecha) {
 
-    const timerId = setInterval(() => {
+    timerId = setInterval(() => {
 
         if (fecha.dias === 0 && fecha.horas === 0 && fecha.minutos === 0 && fecha.segundos === 0) {
             clearInterval(timerId);
@@ -101,28 +113,28 @@ function activateContador(fecha) {
                 }
             }
         }
-        fecha.segundos--;
         changeColor(fecha);
+        fecha.segundos--;
         spanSegundos.textContent = fecha.segundos;
     }, 1000);
 }
 
 function changeColor(diferenciaFecha) {
-    if (diferenciaFecha.meses > 0) {
-        spanDias.style.backgroundColor = "green";
-        spanHoras.style.backgroundColor = "green";
-        spanMinutos.style.backgroundColor = "green";
-        spanSegundos.style.backgroundColor = "green";
-    } else if (diferenciaFecha.meses = 0 && diferenciaFecha.dias > 7) {
-        spanDias.style.backgroundColor = "orange";
-        spanHoras.style.backgroundColor = "orange";
-        spanMinutos.style.backgroundColor = "orange";
-        spanSegundos.style.backgroundColor = "orange";
+    if (diferenciaFecha.dias >= 30) {
+        spanDias.style.color = "green";
+        spanHoras.style.color = "green";
+        spanMinutos.style.color = "green";
+        spanSegundos.style.color = "green";
+    } else if (diferenciaFecha.dias < 30 && diferenciaFecha.dias > 6) {
+        spanDias.style.color = "orange";
+        spanHoras.style.color = "orange";
+        spanMinutos.style.color = "orange";
+        spanSegundos.style.color = "orange";
     } else {
-        spanDias.style.backgroundColor = "red";
-        spanHoras.style.backgroundColor = "red";
-        spanMinutos.style.backgroundColor = "red";
-        spanSegundos.style.backgroundColor = "red";
+        spanDias.style.color = "red";
+        spanHoras.style.color = "red";
+        spanMinutos.style.color = "red";
+        spanSegundos.style.color = "red";
     }
 }
 

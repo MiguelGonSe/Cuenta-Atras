@@ -3,14 +3,30 @@
     padding: 0;
     text-align: center;
     padding: 40px;
+    background: #f5f7fa;
 }
 
-.cuentaAtras { 
+.cuentaAtras {
     display: flex;
     justify-content: center;
+    gap: 16px;
+    align-items: center;
+    font-weight: bold;
+
+    span {
+        font-size: 2em;
+    }
 }
 
-.cuentaAtras span {
-    font-size: 2em;
-    font-weight: bold;
+h1 {
+    font-size: 3rem;
+    margin-bottom: 22px;
+    text-align: center;
+    letter-spacing: 1.5px;
+}
+
+input[type="date"] {
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 1.2rem;
 }
